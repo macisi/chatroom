@@ -8,3 +8,6 @@ body { background-color: #FAE7E7;}
 
 .inputArea { width: calc(100% - 118px); padding: 4px; height: 72px; border: 0 none; vertical-align: middle;}
 .send { width: 110px; height: 78px; border: 1px solid #000; border-radius: 5px; vertical-align: middle;}
+
+.login-wrap { position: absolute; left: 25%; top: 25%; width: 50%; height: 50%; background-color: #fff; border-radius: 5px; border: 1px solid #c0c0c0;}
+.login-wrap .contrib-group {}

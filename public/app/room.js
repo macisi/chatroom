@@ -5,28 +5,64 @@ require(['socket.io'], function(io){
 	var list = document.getElementById("J-chatList");
 	var input = document.getElementById("J-input");
 	var send = document.getElementById("J-send");
+	var submit = document.getElementById("J-submit");
 
 	var pathname = window.location.pathname;
 	var roomId = pathname.replace('/room/', '');
 
-	socket.on('connect', function(){
+	var layout = {
+		el: document.getElementById("J-room"),
+		init: function(){
+			submit.addEventListener("click", function(e){
+				setUserInfo('username=Mike');
+			}, false);
+		}
+	};
 
-		socket.emit('login', {
-			id: roomId
+	layout.init();
+
+	
+	/**
+	 * [send userinfo]
+	 * @param {[type]} data [userinfo]
+	 */
+	function setUserInfo(data){
+		var xhr = new XMLHttpRequest();
+
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState === 4 && xhr.status === 200) {
+				console.log(xhr.responseText);
+				beginChat();
+			}
+		};
+
+		xhr.open('post', '/user', true);
+		xhr.send(data);
+	}
+
+	/**
+	 * [after set up user's info, start chatting]
+	 */
+	function beginChat(){
+		socket.on('connect', function(){
+
+			socket.emit('login', {
+				id: roomId
+			});
+
+			socket.on('startChat', start);
+
+			socket.on('ready', ready);
+
+			socket.on('message', updateList);
+
+			socket.on('leave', leaveRoom);
+
+			send.addEventListener("click", sendMessage, false);
+			input.addEventListener("keypress", sendMessage, false);
+
 		});
-
-		socket.on('startChat', start);
-
-		socket.on('ready', ready);
-
-		socket.on('message', updateList);
-
-		socket.on('leave', leaveRoom);
-
-		send.addEventListener("click", sendMessage, false);
-		input.addEventListener("keypress", sendMessage, false);
-
-	});
+	}
 
 	/**
 	 * [start chat]

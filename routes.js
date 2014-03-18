@@ -22,5 +22,9 @@ module.exports = function(app, io){
 		});
 	});
 
+	app.post('/user', function(req, res){
+		console.log(req.body);
+	});
+
 	room(app, io);
 };

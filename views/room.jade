@@ -7,10 +7,17 @@ html(lang="zh-CN")
 		link(href="/css/base.css", rel="stylesheet")
 		script(src="/config.js")
 		script(src="/lib/require.js")
-	body
+	body#J-room
 		.chatList#J-chatList
 		.editor
 			textarea#J-input.inputArea
 			button#J-send.send Send
+		.login-wrap
+			.control-group
+				label.control-label please enter your nickname
+				.controls
+					input(type="text", name="username")
+			.control-group
+				button(type="button")#J-submit enter
 		script.
 			require(['app/room']);
