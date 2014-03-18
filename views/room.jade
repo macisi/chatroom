@@ -1,0 +1,11 @@
+doctype html
+html(lang="zh-CN")
+	head
+		title= "chatroom"
+		link(href="/css/base.css", rel="stylesheet")
+	body
+		.chatList#J-chatList
+		textarea#J-input.inputArea
+		button#J-send.send Send
+		script(src="/socket.io/socket.io.js")
+		script(src="/app/app.js")
