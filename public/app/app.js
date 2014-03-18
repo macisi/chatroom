@@ -22,6 +22,7 @@ socket.on('connect', function(){
 	socket.on('leave', leaveRoom);
 
 	send.addEventListener("click", sendMessage, false);
+	input.addEventListener("keypress", sendMessage, false);
 
 });
 
@@ -43,7 +44,11 @@ function ready(data){
  * [send message]
  */
 function sendMessage(e){
-	socket.send(input.value);
+	//click send button or press enter on textarea
+	if (e.target === send || (e.target === input && e.keyCode === 13)) {
+		socket.send(input.value);
+		input.value = "";
+	}
 }
 
 /**
@@ -54,6 +59,7 @@ function updateList(data){
 	var item = document.createElement("p");
 	item.innerHTML = data;
 	list.appendChild(item);
+	list.scrollTop = list.scrollHeight - list.offsetHeight;
 }
 
 /**

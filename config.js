@@ -11,6 +11,7 @@ module.exports = function(app, io){
 
 	app.use(express.static(process.cwd() + '/public'));
 
+	// console.log(app.get('view cache'));
 	//show all comment
 	io.set('log level', 1);
 
