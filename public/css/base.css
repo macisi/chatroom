@@ -2,6 +2,7 @@ body { background-color: #FAE7E7;}
 
 /* layout */
 .chatList { position: fixed; left: 0; top: 0; width: 100%; height: calc(100% - 80px); overflow-y: scroll;}
+.chatList p { word-wrap: break-word;}
 
 .editor { position: fixed; left: 0; bottom: 0; width: 100%; height: 80px;}
 

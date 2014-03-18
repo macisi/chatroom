@@ -1,14 +1,16 @@
 doctype html
 html(lang="zh-CN")
 	head
-		title= "chatroom"
+		title= "room " + id 
 		meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 		link(href="/css/normalize.css", rel="stylesheet")
 		link(href="/css/base.css", rel="stylesheet")
+		script(src="/config.js")
+		script(src="/lib/require.js")
 	body
 		.chatList#J-chatList
 		.editor
 			textarea#J-input.inputArea
 			button#J-send.send Send
-		script(src="/socket.io/socket.io.js")
-		script(src="/app/app.js")
+		script.
+			require(['app/room']);

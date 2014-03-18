@@ -4,5 +4,16 @@ html(lang="zh-CN")
         title= pageTitle
         link(href="/css/normalize.css", rel="stylesheet")
         link(href="/css/base.css", rel="stylesheet")
+        script(src="/config.js")
+        script(src="/lib/require.js")
     body
         h1 welcome to chatroom
+        .login-form
+            .control-group
+                label.control-label name
+                .controls
+                    input(type="text")
+            .control-group
+                button(type="button") enter
+        script.
+            require(['app/home']);

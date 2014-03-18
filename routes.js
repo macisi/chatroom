@@ -15,8 +15,11 @@ module.exports = function(app, io){
 
 	app.get('/room/:id', function(req, res){
 
+		var id = req.params.id;
 		//render views/room.jade
-		res.render('room');
+		res.render('room', {
+			id: id
+		});
 	});
 
 	room(app, io);
