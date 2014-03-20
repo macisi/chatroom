@@ -3,8 +3,11 @@
  */
 var express = require('express');
 var app = express();
+
+app.use(express.bodyParser());
+
 var server = require('http').createServer(app);
-var port = 8080;
+var port = isNaN(process.argv[2]) ? 8080: process.argv[2];
 
 var io = require('socket.io').listen(app.listen(port));
 io.configure('production', function(){

@@ -20,11 +20,18 @@ module.exports = function(app, io){
 		res.render('room', {
 			id: id
 		});
+
 	});
 
 	app.post('/user', function(req, res){
-		console.log(req.body);
+		//todo
+		res.send({
+			success: true
+		});
+		res.send(200);
+
+		room.addMember(req.body);
 	});
 
-	room(app, io);
+	room.init(app, io);
 };

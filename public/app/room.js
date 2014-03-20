@@ -13,9 +13,26 @@ require(['socket.io'], function(io){
 	var layout = {
 		el: document.getElementById("J-room"),
 		init: function(){
-			submit.addEventListener("click", function(e){
-				setUserInfo('username=Mike');
-			}, false);
+
+			socket.on('connect', function(){
+				socket.emit('login', {
+					id: roomId
+				});
+
+				socket.on('startChat', start);
+
+				socket.on('newMember', welcomeNewer);
+
+				socket.on('ready', ready);
+
+				socket.on('message', updateList);
+
+				socket.on('leave', leaveRoom);
+
+				submit.addEventListener("click", function(e){
+					setUserInfo('username=Mike');
+				}, false);
+			});
 		}
 	};
 
@@ -31,37 +48,32 @@ require(['socket.io'], function(io){
 
 		xhr.onreadystatechange = function(){
 			if (xhr.readyState === 4 && xhr.status === 200) {
-				console.log(xhr.responseText);
-				beginChat();
+				var res = JSON.parse(xhr.responseText);
+				if (res.success) {
+					beginChat();
+				}
 			}
 		};
 
 		xhr.open('post', '/user', true);
+		xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 		xhr.send(data);
+	}
+
+	/**
+	 * [when someone join in room, show welcome him]
+	 */
+	function welcomeNewer(data){
+		console.log(data);
 	}
 
 	/**
 	 * [after set up user's info, start chatting]
 	 */
 	function beginChat(){
-		socket.on('connect', function(){
-
-			socket.emit('login', {
-				id: roomId
-			});
-
-			socket.on('startChat', start);
-
-			socket.on('ready', ready);
-
-			socket.on('message', updateList);
-
-			socket.on('leave', leaveRoom);
-
-			send.addEventListener("click", sendMessage, false);
-			input.addEventListener("keypress", sendMessage, false);
-
-		});
+		
+		send.addEventListener("click", sendMessage, false);
+		input.addEventListener("keypress", sendMessage, false);
 	}
 
 	/**

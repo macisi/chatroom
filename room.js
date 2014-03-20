@@ -1,10 +1,37 @@
 /**
  * [socket logic config]
  */
+var util = require('util');
+var events = require('events'); 
 
-module.exports = function(app, io){
+function Room(){
+	events.EventEmitter.call(this);
+	this.members = {};
+}
+util.inherits(Room, events.EventEmitter);
+
+Room.prototype.init = function(app, io){
+
+	var _this = this;
+
 
 	var chat = io.of('/chat').on('connection', function(socket){
+
+		_this.on('getNewMember', function(data){
+
+			// if (this.members.indexOf(data.username) === -1) {
+			// 	//new member
+
+			// } else {
+			// 	//already in rooms
+			// 	this.emit('error', {
+			// 		errorText: 'sorry, this man already in the room'
+			// 	});
+			// }
+			console.log(data);
+			chat.in(this.room).emit('newMember', data);
+
+		});
 
 		socket.on('login', function(data){
 			if (!data) return;
@@ -16,9 +43,7 @@ module.exports = function(app, io){
 			socket.in(socket.room).emit('startChat', {
 				id: data.id
 			});
-
 		});
-
 
 		socket.emit('ready', {
 			data: "I'm ready!"
@@ -43,10 +68,15 @@ module.exports = function(app, io){
 			});
 
 			socket.leave(socket.room);
+			socket.removeListener('getNewMember');
 		});
 
-		// console.log(socket, rooms);
-		// 
 	});
-
 };
+Room.prototype.addMember = function(data){
+	this.emit('getNewMember', data);
+};
+
+var room = new Room();
+
+module.exports = room;
