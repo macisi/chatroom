@@ -6,7 +6,7 @@ var events = require('events');
 
 function Room(){
 	events.EventEmitter.call(this);
-	this.members = {};
+	this.members = [];
 }
 util.inherits(Room, events.EventEmitter);
 
@@ -14,21 +14,22 @@ Room.prototype.init = function(app, io){
 
 	var _this = this;
 
-
 	var chat = io.of('/chat').on('connection', function(socket){
 
 		_this.on('getNewMember', function(data){
 
-			// if (this.members.indexOf(data.username) === -1) {
-			// 	//new member
-
-			// } else {
-			// 	//already in rooms
-			// 	this.emit('error', {
-			// 		errorText: 'sorry, this man already in the room'
-			// 	});
-			// }
-			console.log(data);
+			if (this.members.indexOf(data.nickname) === -1) {
+				//new member
+				this.members.push(data.nickname);
+			} else {
+				//already in rooms
+				socket.emit('error', {
+					errorText: 'sorry, this name had been used!'
+				});
+				return;
+			}
+			// console.log(socket);
+			socket.member = data;
 			chat.in(this.room).emit('newMember', data);
 
 		});
@@ -56,7 +57,10 @@ Room.prototype.init = function(app, io){
 			 * - socket.broadcast.to(this.room): send the data to all the clients connected to the room except the sender
 			 * - chat.in(this.room): send the data to all the clients connected to the room
 			 */
-			chat.in(this.room).send(data);
+			chat.in(this.room).emit('msg', {
+				data: data,
+				user: socket.member
+			});
 			// socket.broadcast.to(this.room).send(data);
 		});
 
@@ -68,7 +72,7 @@ Room.prototype.init = function(app, io){
 			});
 
 			socket.leave(socket.room);
-			socket.removeListener('getNewMember');
+			_this.removeAllListeners('getNewMember');
 		});
 
 	});

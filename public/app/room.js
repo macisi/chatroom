@@ -25,12 +25,12 @@ require(['socket.io'], function(io){
 
 				socket.on('ready', ready);
 
-				socket.on('message', updateList);
+				socket.on('msg', updateList);
 
 				socket.on('leave', leaveRoom);
 
 				submit.addEventListener("click", function(e){
-					setUserInfo('username=Mike');
+					setUserInfo('nickname=' + document.querySelector("input[name='nickname']").value);
 				}, false);
 			});
 		}
@@ -105,9 +105,9 @@ require(['socket.io'], function(io){
 	 * [update chat list]
 	 */
 	function updateList(data){
-		console.log('receive:', data);
+		console.log(data);
 		var item = document.createElement("p");
-		item.innerHTML = data;
+		item.innerHTML = data.user.nickname + ":" + data.data;
 		list.appendChild(item);
 		list.scrollTop = list.scrollHeight - list.offsetHeight;
 	}
