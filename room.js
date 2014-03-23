@@ -17,10 +17,10 @@ Room.prototype.init = function(app, io){
 	var chat = io.of('/chat').on('connection', function(socket){
 
 		_this.on('getNewMember', function(data){
-
-			if (this.members.indexOf(data.nickname) === -1) {
+			console.log('getNewMember', data.nickname);
+			if (_this.members.indexOf(data.nickname) === -1) {
 				//new member
-				this.members.push(data.nickname);
+				_this.members.push(data.nickname);
 			} else {
 				//already in rooms
 				socket.emit('error', {
@@ -73,6 +73,7 @@ Room.prototype.init = function(app, io){
 
 			socket.leave(socket.room);
 			_this.removeAllListeners('getNewMember');
+			socket.member && socket.member.nickname && _this.members.splice(_this.members.indexOf(socket.member.nickname), 1);
 		});
 
 	});
